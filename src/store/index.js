@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const debug = false
-const api = debug ? 'http://127.0.0.1:5000' : 'https://view-oj-api.zuccacm.top'
+const api = debug ? 'http://127.0.0.1:5000' : 'https://api.zuccacm.top/view-oj'
 
 var state = {
     page: null,
@@ -17,7 +17,7 @@ var state = {
         status: '',
         isUpdated: false
     },
-    showFreshmanStatus: false,
+    showFreshmanStatus: true,
     backendVersion: "",
     TopLength: 25,
     TopOverviewData: [],
