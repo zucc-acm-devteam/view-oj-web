@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-top: 80px">
     <el-card class="box-card" shadow="hover">
       <div class="imgBox">
         <img src="@/assets/acm.png" alt="" width="100%">
@@ -7,9 +7,21 @@
       <div class="page-title">
         <b>User Login</b>
       </div>
-      <el-divider><i class="el-icon-postcard"></i></el-divider>
+      <div style="width: 100%; text-align: center">
+        <el-button class="other-login-methods-button"
+                   title="使用实验室统一账号登录"
+                   :loading="ssoLock"
+                   :disabled="ssoLock"
+                   round
+                   @click="ssoLogin">
+          <el-image style="width: 20px; height: 20px; overflow: unset" fit="fill" src="favicon.ico"/>
+          <span style="margin-left: 10px; font-weight: bold">统一账号登录</span>
+        </el-button>
+      </div>
+      <el-divider>或</el-divider>
       <div class="form-box">
         <el-form :model="FormData" status-icon :rules="rules" ref="FormData" class="demo-ruleForm">
+          <p style="text-align: center; margin-bottom: 20px; font-weight: bold;">使用原账号登录</p>
           <el-form-item prop="username">
             <el-input
                 v-model="FormData.username"
@@ -49,7 +61,8 @@ export default {
       rules: {
         username: [{required: true, message: 'Please enter your username!', trigger: 'blur'}],
         password: [{required: true, message: 'Please enter your password!', trigger: 'blur'}]
-      }
+      },
+      ssoLock: false
     }
   },
   methods: {
@@ -64,6 +77,15 @@ export default {
           return false
         }
       })
+    },
+    ssoLogin() {
+      this.ssoLock = true
+      this.$store.commit('loginBySSO', {
+        onFailed: this.resetSSOLock
+      })
+    },
+    resetSSOLock() {
+      this.ssoLock = false
     }
   },
   created() {
@@ -74,18 +96,14 @@ export default {
 
 <style scoped>
 .box-card {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 400px;
+  margin: 0 auto;
 }
 
 .imgBox {
-  position: absolute;
-  margin-top: 10px;
-  left: 50%;
-  transform: translate(-50%, 0);
+  width: 200px;
+  height: 125px;
+  margin: 0 auto;
 }
 
 .form-box {
@@ -96,7 +114,7 @@ export default {
 
 .page-title {
   width: 100%;
-  margin-top: 150px;
+  margin-top: 10px;
   margin-bottom: 20px;
   text-align: center;
   font-size: 30px;
@@ -104,12 +122,24 @@ export default {
 
 .submitBox {
   width: 100%;
-  margin-top: 10px;
-  margin-bottom: 10px;
 }
 
 .submitButton {
   width: 100%;
   height: auto;
+}
+
+.other-login-methods-button {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+}
+
+.other-login-methods-button /deep/ span {
+  line-height: 20px;
 }
 </style>

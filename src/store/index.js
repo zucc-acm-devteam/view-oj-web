@@ -5,6 +5,8 @@ Vue.use(Vuex)
 
 const debug = false
 const api = debug ? 'http://127.0.0.1:5000' : 'https://api.zuccacm.top/view-oj'
+const ssoapi = 'https://api.zuccacm.top/sso/v1'
+const ssoLoginUrl = 'https://sso.zuccacm.top/#/login'
 
 var state = {
     page: null,
@@ -69,6 +71,32 @@ var mutations = {
             .catch(function (error) {
                 if (error.response) {
                     state.page.$message.error(error.response.data.msg)
+                }
+            })
+    },
+    loginBySSO(state, data) {
+        state.page.$http.get(ssoapi + '/ticket')
+            .then(resp => {
+                let ticket = resp.data.data.ticket
+                let username = resp.data.data.username
+                state.page.$http.post(api + '/v2/session/ssoLogin', {
+                    username, ticket
+                }).then(resp => {
+                    state.page.$message.success(resp.data.msg)
+                    state.page.$store.commit('updateUser')
+                    state.page.$router.push('/')
+                }).catch(err => {
+                    if(data && data.onFailed) data.onFailed()
+                    state.page.$message.error(err.response.data.msg)
+                })
+            })
+            .catch(err => {
+                if (err.response) {
+                    let callbackUrl = state.page.$router.resolve({name: 'ssoCallback'}).href
+                    callbackUrl = encodeURIComponent(window.location.origin + '/' + callbackUrl)
+                    window.location.href = ssoLoginUrl + '?cb=' + callbackUrl
+                }else{
+                    if(data && data.onFailed) data.onFailed()
                 }
             })
     },
