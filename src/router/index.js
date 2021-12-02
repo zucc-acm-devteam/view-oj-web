@@ -12,7 +12,7 @@ export default new Router({
             meta: {
                 title: 'Home - viewOJ'
             }
-        },{
+        }, {
             path: '/freshman',
             name: 'freshman-page',
             component: () => import('@/components/page/freshman-page'),
@@ -41,6 +41,13 @@ export default new Router({
                 title: 'Login - viewOJ'
             }
         }, {
+            name: 'ssoCallback',
+            path: '/ssoCallback',
+            component: () => import('@/components/page/sso-login-callback-page'),
+            meta: {
+                title: '单点登录跳转 - viewOJ'
+            }
+        }, {
             path: '/ranklist',
             name: 'ranklist-page',
             component: () => import('@/components/page/ranklist-page'),
@@ -61,7 +68,7 @@ export default new Router({
             meta: {
                 title: 'Monitor - viewOJ'
             }
-        },{
+        }, {
             path: '/camp',
             name: 'camp-page',
             component: () => import('@/components/page/camp-page'),
