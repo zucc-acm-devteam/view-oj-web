@@ -138,10 +138,8 @@ export default {
                 else if (that.showFreshman) that.tableData.push(item)
                 continue
               }
-              if (item.is_freshman) {
-                if (that.showFreshman) that.tableData.push(item)
-              } else {
-                if (that.showFreshman || item.status !== 1) continue
+              if (item.status !== 1) continue
+              if (item.is_freshman === that.showFreshman) {
                 that.tableData.push(item)
               }
             }
